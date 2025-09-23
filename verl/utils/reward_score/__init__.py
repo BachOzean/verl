@@ -42,9 +42,11 @@ def default_compute_score(
     """
     if data_source == "openai/gsm8k":
         from . import gsm8k
-
-        res = gsm8k.compute_score(solution_str, ground_truth)
-    elif data_source in ["lighteval/MATH", "DigitalLearningGmbH/MATH-lighteval", "HuggingFaceH4/MATH-500"]:
+        # print(f"solution_str: {solution_str}")
+        # print(f"ground_truth: {ground_truth}")
+        res = gsm8k.compute_score(solution_str, ground_truth, method="hybrid")
+        # print(f"res: {res}")
+    elif data_source in ["lighteval/MATH", "DigitalLearningGmbH/MATH-lighteval", "HuggingFaceH4/MATH-500", "MATH-500", "math"]:
         from . import math_reward
 
         res = math_reward.compute_score(solution_str, ground_truth)
@@ -101,9 +103,16 @@ def default_compute_score(
         from . import search_r1_like_qa_em
 
         res = search_r1_like_qa_em.compute_score(solution_str, ground_truth)
+    elif data_source == "openr1-math-220k-steps-enum":
+        from . import openr1_steps_enum
+
+        res = openr1_steps_enum.compute_score(solution_str, ground_truth)
 
     else:
-        raise NotImplementedError(f"Reward function is not implemented for {data_source=}")
+        from . import math_reward
+
+        res = math_reward.compute_score(solution_str, ground_truth)
+        # raise NotImplementedError(f"Reward function is not implemented for {data_source=}")
 
     if isinstance(res, dict):
         return res

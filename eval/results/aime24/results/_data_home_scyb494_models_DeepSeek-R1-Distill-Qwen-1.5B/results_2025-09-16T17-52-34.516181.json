@@ -1,0 +1,126 @@
+{
+  "config_general": {
+    "lighteval_sha": "?",
+    "num_fewshot_seeds": 1,
+    "max_samples": null,
+    "job_id": 0,
+    "start_time": 607374.135113705,
+    "end_time": 607806.24263599,
+    "total_evaluation_time_secondes": "432.1075222850777",
+    "model_name": "_data_home_scyb494_models_DeepSeek-R1-Distill-Qwen-1.5B",
+    "model_sha": "",
+    "model_dtype": null,
+    "model_size": null,
+    "generation_parameters": {
+      "early_stopping": null,
+      "repetition_penalty": 1.0,
+      "frequency_penalty": 0.0,
+      "length_penalty": null,
+      "presence_penalty": 0.0,
+      "max_new_tokens": 32768,
+      "min_new_tokens": 0,
+      "seed": 42,
+      "stop_tokens": null,
+      "temperature": 0.6,
+      "top_k": 10,
+      "min_p": 0.0,
+      "top_p": 0.95,
+      "truncate_prompt": null,
+      "response_format": null
+    }
+  },
+  "results": {
+    "custom|aime24|0": {
+      "extractive_match": 0.06666666666666667,
+      "extractive_match_stderr": 0.046320555585310084,
+      "mean_length": 55289.3,
+      "mean_length_stderr": 8551.10542644271
+    },
+    "all": {
+      "extractive_match": 0.06666666666666667,
+      "extractive_match_stderr": 0.046320555585310084,
+      "mean_length": 55289.3,
+      "mean_length_stderr": 8551.10542644271
+    }
+  },
+  "versions": {
+    "custom|aime24|0": 1
+  },
+  "config_tasks": {
+    "custom|aime24": {
+      "name": "aime24",
+      "prompt_function": "aime_prompt_fn",
+      "hf_repo": "HuggingFaceH4/aime_2024",
+      "hf_subset": "default",
+      "metric": [
+        {
+          "metric_name": "extractive_match",
+          "higher_is_better": true,
+          "category": "3",
+          "use_case": "1",
+          "sample_level_fn": "sample_level_fn",
+          "corpus_level_fn": "mean"
+        },
+        {
+          "metric_name": "mean_length",
+          "higher_is_better": false,
+          "category": "3",
+          "use_case": "1",
+          "sample_level_fn": "compute_sample_length",
+          "corpus_level_fn": "agg_mean_length"
+        }
+      ],
+      "hf_revision": null,
+      "hf_filter": null,
+      "hf_avail_splits": [
+        "train"
+      ],
+      "trust_dataset": false,
+      "evaluation_splits": [
+        "train"
+      ],
+      "few_shots_split": null,
+      "few_shots_select": null,
+      "generation_size": 32768,
+      "generation_grammar": null,
+      "stop_sequence": [],
+      "num_samples": null,
+      "suite": [
+        "custom"
+      ],
+      "original_num_docs": 30,
+      "effective_num_docs": 30,
+      "must_remove_duplicate_docs": false,
+      "version": 1
+    }
+  },
+  "summary_tasks": {
+    "custom|aime24|0": {
+      "hashes": {
+        "hash_examples": "ddec8fc79d0a014b",
+        "hash_full_prompts": "ddec8fc79d0a014b",
+        "hash_input_tokens": "b680011fa0c11609",
+        "hash_cont_tokens": "b8e33a1cb9456567"
+      },
+      "truncated": 0,
+      "non_truncated": 30,
+      "padded": 0,
+      "non_padded": 30,
+      "effective_few_shots": 0.0,
+      "num_truncated_few_shots": 0
+    }
+  },
+  "summary_general": {
+    "hashes": {
+      "hash_examples": "c903e836a519cf98",
+      "hash_full_prompts": "c903e836a519cf98",
+      "hash_input_tokens": "0dc0ea72b051820d",
+      "hash_cont_tokens": "94a77eb7046649e8"
+    },
+    "truncated": 0,
+    "non_truncated": 30,
+    "padded": 0,
+    "non_padded": 30,
+    "num_truncated_few_shots": 0
+  }
+}

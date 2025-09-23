@@ -1,0 +1,117 @@
+{
+  "config_general": {
+    "lighteval_sha": "?",
+    "num_fewshot_seeds": 1,
+    "max_samples": null,
+    "job_id": 0,
+    "start_time": 598586.479684187,
+    "end_time": 599263.798216831,
+    "total_evaluation_time_secondes": "677.3185326440725",
+    "model_name": "_data_home_scyb494_verl_checkpoints_grpo_subquestion_0914_22:27_global_step_100_actor_huggingface",
+    "model_sha": "",
+    "model_dtype": null,
+    "model_size": null,
+    "generation_parameters": {
+      "early_stopping": null,
+      "repetition_penalty": 1.0,
+      "frequency_penalty": 0.0,
+      "length_penalty": null,
+      "presence_penalty": 0.0,
+      "max_new_tokens": 32768,
+      "min_new_tokens": 0,
+      "seed": 42,
+      "stop_tokens": null,
+      "temperature": 0.6,
+      "top_k": 10,
+      "min_p": 0.0,
+      "top_p": 0.95,
+      "truncate_prompt": null,
+      "response_format": null
+    }
+  },
+  "results": {
+    "lighteval|gsm8k|3": {
+      "extractive_match": 0.6724791508718726,
+      "extractive_match_stderr": 0.01292710221042673
+    },
+    "all": {
+      "extractive_match": 0.6724791508718726,
+      "extractive_match_stderr": 0.01292710221042673
+    }
+  },
+  "versions": {
+    "lighteval|gsm8k|3": 0
+  },
+  "config_tasks": {
+    "lighteval|gsm8k": {
+      "name": "gsm8k",
+      "prompt_function": "gsm8k",
+      "hf_repo": "gsm8k",
+      "hf_subset": "main",
+      "metric": [
+        {
+          "metric_name": "extractive_match",
+          "higher_is_better": true,
+          "category": "3",
+          "use_case": "1",
+          "sample_level_fn": "sample_level_fn",
+          "corpus_level_fn": "mean"
+        }
+      ],
+      "hf_revision": null,
+      "hf_filter": null,
+      "hf_avail_splits": [
+        "train",
+        "test"
+      ],
+      "trust_dataset": true,
+      "evaluation_splits": [
+        "test"
+      ],
+      "few_shots_split": null,
+      "few_shots_select": "random_sampling_from_train",
+      "generation_size": 256,
+      "generation_grammar": null,
+      "stop_sequence": [
+        "Question:"
+      ],
+      "num_samples": null,
+      "suite": [
+        "lighteval"
+      ],
+      "original_num_docs": 1319,
+      "effective_num_docs": 1319,
+      "must_remove_duplicate_docs": false,
+      "version": 0
+    }
+  },
+  "summary_tasks": {
+    "lighteval|gsm8k|3": {
+      "hashes": {
+        "hash_examples": "0ed016e24e7512fd",
+        "hash_full_prompts": "d79cb2d94bfd2ecb",
+        "hash_input_tokens": "be096c1c9d5b0468",
+        "hash_cont_tokens": "4bde8424c7e8c9e3"
+      },
+      "truncated": 0,
+      "non_truncated": 1319,
+      "padded": 0,
+      "non_padded": 1319,
+      "effective_few_shots": 3.0,
+      "num_truncated_few_shots": 0
+    }
+  },
+  "summary_general": {
+    "hashes": {
+      "hash_examples": "bc71463e88551d0e",
+      "hash_full_prompts": "1a64e918ca01a12a",
+      "hash_input_tokens": "98e55854ddef3d3b",
+      "hash_cont_tokens": "0a183f20f27d63f1"
+    },
+    "truncated": 0,
+    "non_truncated": 1319,
+    "padded": 0,
+    "non_padded": 1319,
+    "num_truncated_few_shots": 0
+  }
+}

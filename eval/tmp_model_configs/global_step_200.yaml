@@ -1,0 +1,25 @@
+model_parameters:
+    model_name: "/data/home/scyb494/verl/checkpoints/grpo_subquestion_0914_22:27/global_step_200/actor/huggingface"
+    dtype: "bfloat16"
+    tensor_parallel_size: 1
+    data_parallel_size: 1
+    pipeline_parallel_size: 1
+    gpu_memory_utilization: 0.9
+    max_model_length: 32768
+    swap_space: 4
+    seed: 1
+    trust_remote_code: True
+    use_chat_template: False
+    max_num_batched_tokens: 32768
+    generation_parameters:
+      presence_penalty: 0.0
+      repetition_penalty: 1.0
+      frequency_penalty: 0.0
+      temperature: 0.6
+      top_k: 10
+      min_p: 0.0
+      top_p: 0.95
+      seed: 42
+      stop_tokens: null
+      max_new_tokens: 32768
+      min_new_tokens: 0

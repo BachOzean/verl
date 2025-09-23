@@ -1,0 +1,126 @@
+{
+  "config_general": {
+    "lighteval_sha": "?",
+    "num_fewshot_seeds": 1,
+    "max_samples": null,
+    "job_id": 0,
+    "start_time": 520089.891106375,
+    "end_time": 521139.531210363,
+    "total_evaluation_time_secondes": "1049.6401039880002",
+    "model_name": "_data_home_scyb494_verl_checkpoints_grpo_subquestion_0914_22:27_global_step_300_actor_huggingface",
+    "model_sha": "",
+    "model_dtype": null,
+    "model_size": null,
+    "generation_parameters": {
+      "early_stopping": null,
+      "repetition_penalty": 1.0,
+      "frequency_penalty": 0.0,
+      "length_penalty": null,
+      "presence_penalty": 0.0,
+      "max_new_tokens": 32768,
+      "min_new_tokens": 0,
+      "seed": 42,
+      "stop_tokens": null,
+      "temperature": 0.6,
+      "top_k": 10,
+      "min_p": 0.0,
+      "top_p": 0.95,
+      "truncate_prompt": null,
+      "response_format": null
+    }
+  },
+  "results": {
+    "custom|math_500|0": {
+      "extractive_match": 0.688,
+      "extractive_match_stderr": 0.02074059653648809,
+      "mean_length": 15878.028,
+      "mean_length_stderr": 1549.288200993575
+    },
+    "all": {
+      "extractive_match": 0.688,
+      "extractive_match_stderr": 0.02074059653648809,
+      "mean_length": 15878.028,
+      "mean_length_stderr": 1549.288200993575
+    }
+  },
+  "versions": {
+    "custom|math_500|0": 1
+  },
+  "config_tasks": {
+    "custom|math_500": {
+      "name": "math_500",
+      "prompt_function": "math500_prompt_fn",
+      "hf_repo": "HuggingFaceH4/MATH-500",
+      "hf_subset": "default",
+      "metric": [
+        {
+          "metric_name": "extractive_match",
+          "higher_is_better": true,
+          "category": "3",
+          "use_case": "1",
+          "sample_level_fn": "sample_level_fn",
+          "corpus_level_fn": "mean"
+        },
+        {
+          "metric_name": "mean_length",
+          "higher_is_better": false,
+          "category": "3",
+          "use_case": "1",
+          "sample_level_fn": "compute_sample_length",
+          "corpus_level_fn": "agg_mean_length"
+        }
+      ],
+      "hf_revision": null,
+      "hf_filter": null,
+      "hf_avail_splits": [
+        "test"
+      ],
+      "trust_dataset": false,
+      "evaluation_splits": [
+        "test"
+      ],
+      "few_shots_split": null,
+      "few_shots_select": null,
+      "generation_size": 32768,
+      "generation_grammar": null,
+      "stop_sequence": [],
+      "num_samples": null,
+      "suite": [
+        "custom"
+      ],
+      "original_num_docs": 500,
+      "effective_num_docs": 500,
+      "must_remove_duplicate_docs": false,
+      "version": 1
+    }
+  },
+  "summary_tasks": {
+    "custom|math_500|0": {
+      "hashes": {
+        "hash_examples": "a911e1f4bd5e0c75",
+        "hash_full_prompts": "a911e1f4bd5e0c75",
+        "hash_input_tokens": "ff784e7a04c42363",
+        "hash_cont_tokens": "3611e6fe334c7386"
+      },
+      "truncated": 0,
+      "non_truncated": 500,
+      "padded": 0,
+      "non_padded": 500,
+      "effective_few_shots": 0.0,
+      "num_truncated_few_shots": 0
+    }
+  },
+  "summary_general": {
+    "hashes": {
+      "hash_examples": "382014da35c4c1c2",
+      "hash_full_prompts": "382014da35c4c1c2",
+      "hash_input_tokens": "a62ab939b0cfd737",
+      "hash_cont_tokens": "02aec1ee1670b6f3"
+    },
+    "truncated": 0,
+    "non_truncated": 500,
+    "padded": 0,
+    "non_padded": 500,
+    "num_truncated_few_shots": 0
+  }
+}

@@ -1,0 +1,11 @@
+step,task,metric,value,stderr,json_path
+100,gsm8k,extractive_match,0.6724791508718726,0.01292710221042673,/data/home/scyb494/verl/eval/results/gsm8k/results/_data_home_scyb494_verl_checkpoints_grpo_subquestion_0914_22:27_global_step_100_actor_huggingface/results_2025-09-16T15-35-42.098166.json
+100,math_500,extractive_match,0.656,0.02126575803797874,/data/home/scyb494/verl/eval/results/math500/results/_data_home_scyb494_verl_checkpoints_grpo_subquestion_0914_22:27_global_step_100_actor_huggingface/results_2025-09-16T15-59-02.227661.json
+100,math_500,mean_length,20553.832,1739.4080047434184,/data/home/scyb494/verl/eval/results/math500/results/_data_home_scyb494_verl_checkpoints_grpo_subquestion_0914_22:27_global_step_100_actor_huggingface/results_2025-09-16T15-59-02.227661.json
+100,aime24,extractive_match,0.1,0.055708601453115555,/data/home/scyb494/verl/eval/results/aime24/results/_data_home_scyb494_verl_checkpoints_grpo_subquestion_0914_22:27_global_step_100_actor_huggingface/results_2025-09-16T16-05-18.766488.json
+100,aime24,mean_length,36221.23333333333,6168.46094325541,/data/home/scyb494/verl/eval/results/aime24/results/_data_home_scyb494_verl_checkpoints_grpo_subquestion_0914_22:27_global_step_100_actor_huggingface/results_2025-09-16T16-05-18.766488.json
+0,gsm8k,extractive_match,0.6770280515542078,0.012880360794851803,/data/home/scyb494/verl/eval/results/gsm8k/results/_data_home_scyb494_models_DeepSeek-R1-Distill-Qwen-1.5B/results_2025-09-16T17-20-03.808128.json
+0,math_500,extractive_match,0.628,0.0216371979857224,/data/home/scyb494/verl/eval/results/math500/results/_data_home_scyb494_models_DeepSeek-R1-Distill-Qwen-1.5B/results_2025-09-16T17-45-04.013649.json
+0,math_500,mean_length,23390.49,1792.9328926691685,/data/home/scyb494/verl/eval/results/math500/results/_data_home_scyb494_models_DeepSeek-R1-Distill-Qwen-1.5B/results_2025-09-16T17-45-04.013649.json
+0,aime24,extractive_match,0.06666666666666667,0.046320555585310084,/data/home/scyb494/verl/eval/results/aime24/results/_data_home_scyb494_models_DeepSeek-R1-Distill-Qwen-1.5B/results_2025-09-16T17-52-34.516181.json
+0,aime24,mean_length,55289.3,8551.10542644271,/data/home/scyb494/verl/eval/results/aime24/results/_data_home_scyb494_models_DeepSeek-R1-Distill-Qwen-1.5B/results_2025-09-16T17-52-34.516181.json

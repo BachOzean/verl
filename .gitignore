@@ -6,6 +6,7 @@
 **/*.ckpt
 **/outputs
 **/*.tar.gz
+**/*.whl
 **/playground
 **/wandb
 
@@ -126,3 +127,4 @@ logs
 log
 outputs
 .history
+*.out

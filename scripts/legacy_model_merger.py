@@ -19,8 +19,8 @@ To merge FSDP checkpoints:
 ```sh
 python scripts/legacy_model_merger.py merge \
     --backend fsdp \
-    --local_dir checkpoints/verl_fsdp_gsm8k_examples/qwen2_5_0b5_fsdp_saveload/global_step_1/actor \
-    --target_dir /path/to/merged_hf_model
+    --local_dir /data/home/scyb494/verl/checkpoints/grpo_subquestion_0914_22:27/global_step_300/actor \
+    --target_dir /data/home/scyb494/verl/checkpoints/grpo_subquestion_0914_22:27/global_step_300/actor/huggingface
 ```
 
 To merge Megatron checkpoints:
@@ -743,7 +743,7 @@ def main():
         "is_value_model": args.is_value_model,
         "local_dir": args.local_dir,
         "hf_model_path": args.hf_model_path,
-        "hf_model_config_path": args.local_dir,
+        "hf_model_config_path": args.local_dir + "/huggingface",
     }
 
     if args.operation == "merge":
