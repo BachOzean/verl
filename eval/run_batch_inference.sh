@@ -1,15 +1,11 @@
 #!/bin/bash
+export HYDRA_FULL_ERROR=1
+export HF_ENDPOINT="https://hf-mirror.com"
+
 # 批推理启动脚本
+HOME="/data/home/scyb494"
 
-PYTHON_PATH="/opt/anaconda3/envs/xny_verl/bin/python3"
-SCRIPT_PATH="/home/ningmiao/ningyuan/verl/eval/batch_inference.py"
-
-# 检查Python路径是否存在
-if [ ! -f "$PYTHON_PATH" ]; then
-    echo "❌ Python解释器不存在: $PYTHON_PATH"
-    echo "请确保已激活正确的conda环境"
-    exit 1
-fi
+SCRIPT_PATH="$HOME/verl/eval/batch_inference.py"
 
 # 检查脚本路径是否存在
 if [ ! -f "$SCRIPT_PATH" ]; then
@@ -18,14 +14,19 @@ if [ ! -f "$SCRIPT_PATH" ]; then
 fi
 
 # 默认参数
-MODEL="/home/ningmiao/ningyuan/models/DeepSeek-R1-Distill-Qwen-1.5B"
-DATASET="open-r1/OpenR1-Math-220k"
+MODEL="$HOME/models/DeepSeek-R1-Distill-Qwen-1.5B"
+DATASET="/data/home/scyb494/.cache/huggingface/hub/datasets--open-r1--OpenR1-Math-220k/snapshots/e4e141ec9dea9f8326f4d347be56105859b2bd68/data"
 SPLIT="train"
-OUTPUT_DIR="/home/ningmiao/ningyuan/verl/eval/results/OpenR1-Math-220k"
+OUTPUT_DIR="$HOME/verl/eval/results/OpenR1-Math-220k"
 NUM_SAMPLES=64
 BATCH_SIZE=32
-NUM_GPUS=8
+NUM_GPUS=4
 GPU_MEMORY=0.75
+# 新增：控制长度、精度与并发
+MAX_MODEL_LEN=4096
+MAX_TOKENS=1024
+DTYPE="bfloat16"   # 可选: auto|bfloat16|float16|float32
+MAX_NUM_SEQS=1
 
 # 解析命令行参数
 while [[ $# -gt 0 ]]; do
@@ -63,6 +64,22 @@ while [[ $# -gt 0 ]]; do
             GPU_MEMORY="$2"
             shift 2
             ;;
+        --max_model_len)
+            MAX_MODEL_LEN="$2"
+            shift 2
+            ;;
+        --max_tokens)
+            MAX_TOKENS="$2"
+            shift 2
+            ;;
+        --dtype)
+            DTYPE="$2"
+            shift 2
+            ;;
+        --max_num_seqs)
+            MAX_NUM_SEQS="$2"
+            shift 2
+            ;;
         *)
             echo "❌ 未知参数: $1"
             echo "用法: $0 --model <model_path> [其他参数...]"
@@ -78,12 +95,16 @@ if [ -z "$MODEL" ]; then
     echo ""
     echo "可选参数:"
     echo "  --dataset <dataset> (默认: open-r1/OpenR1-Math-220k)"
-    echo "  --split <split> (默认: default)"
+    echo "  --split <split> (默认: train)"
     echo "  --output_dir <dir> (默认: /home/ningmiao/ningyuan/verl/eval/results/OpenR1-Math-220k)"
     echo "  --num_samples <n> (默认: 64)"
     echo "  --batch_size <n> (默认: 32)"
     echo "  --num_gpus <n> (默认: 8)"
-    echo "  --gpu_memory <fraction> (默认: 0.9)"
+    echo "  --gpu_memory <fraction> (默认: 0.75)"
+    echo "  --max_model_len <n> (默认: 4096)"
+    echo "  --max_tokens <n> (默认: 1024)"
+    echo "  --dtype <auto|bfloat16|float16|float32> (默认: bfloat16)"
+    echo "  --max_num_seqs <n> (默认: 1)"
     exit 1
 fi
 
@@ -95,9 +116,13 @@ echo "  样本数: $NUM_SAMPLES"
 echo "  批大小: $BATCH_SIZE"
 echo "  GPU数量: $NUM_GPUS"
 echo "  GPU内存利用率: $GPU_MEMORY"
+echo "  上下文长度: $MAX_MODEL_LEN"
+echo "  生成长度: $MAX_TOKENS"
+echo "  精度: $DTYPE"
+echo "  并发序列上限: $MAX_NUM_SEQS"
 
 # 运行批推理脚本
-exec $PYTHON_PATH $SCRIPT_PATH \
+exec python $SCRIPT_PATH \
     --model "$MODEL" \
     --dataset "$DATASET" \
     --split "$SPLIT" \
@@ -105,4 +130,8 @@ exec $PYTHON_PATH $SCRIPT_PATH \
     --num_samples "$NUM_SAMPLES" \
     --batch_size "$BATCH_SIZE" \
     --num_gpus "$NUM_GPUS" \
-    --gpu_memory_utilization "$GPU_MEMORY"
+    --gpu_memory_utilization "$GPU_MEMORY" \
+    --max_model_len "$MAX_MODEL_LEN" \
+    --max_tokens "$MAX_TOKENS" \
+    --dtype "$DTYPE" \
+    --max_num_seqs "$MAX_NUM_SEQS"
