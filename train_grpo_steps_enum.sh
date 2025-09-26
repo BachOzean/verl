@@ -3,7 +3,7 @@ set -x
 
 pip install datasets==4.0.0
 # 路径前缀
-HOME=/data/home/scyb494/verl
+HOME=/home/ningmiao/ningyuan/verl
 
 # 时间标签
 DATE=$(date +%m%d)
@@ -11,10 +11,8 @@ TIME_TAG=$(date +%H:%M)
 EXP_NAME="grpo_steps_enum_${DATE}_${TIME_TAG}"
 
 # 环境变量
-unset ROCR_VISIBLE_DEVICES
+export CUDA_VISIBLE_DEVICES=0,1,2,3
 export HF_ENDPOINT=https://hf-mirror.com
-export no_proxy="127.0.0.1,localhost"
-export NO_PROXY="127.0.0.1,localhost"
 export HYDRA_FULL_ERROR=1
 export VLLM_ATTENTION_BACKEND=XFORMERS
 
@@ -23,9 +21,9 @@ export SWANLAB_LOG_DIR=$HOME/checkpoints/$EXP_NAME
 export SWANLAB_MODE=local
 
 # 数据路径（使用我们生成的 steps 构造数据）
-TRAIN_PARQUET="/data/home/scyb494/data/OpenR1-Math-220k/grpo_steps_head50k.parquet"
+TRAIN_PARQUET="/home/ningmiao/ningyuan/verl/data/OpenR1-Math-220k/grpo_steps_head50k.parquet"
 # 验证仍用占位 MATH-500（可替换为真实验证集）
-MATH500_VAL_PATH="/data/home/scyb494/verl/data/MATH-500/test.parquet"
+MATH500_VAL_PATH="/home/ningmiao/ningyuan/verl/data/MATH-500/test.parquet"
 
 echo "开始GRPO训练(steps-enum)..."
 echo "训练数据: $TRAIN_PARQUET"
@@ -36,17 +34,17 @@ PYTHONUNBUFFERED=1 python3 -m verl.trainer.main_ppo \
     algorithm.adv_estimator=grpo \
     data.train_files="$TRAIN_PARQUET" \
     data.val_files="$MATH500_VAL_PATH" \
-    data.train_batch_size=128 \
+    data.train_batch_size=256 \
     data.max_prompt_length=4096 \
     data.max_response_length=4096 \
     data.filter_overlong_prompts=True \
     data.truncation='error' \
     data.shuffle=True \
-    actor_rollout_ref.model.path=/data/home/scyb494/models/DeepSeek-R1-Distill-Qwen-1.5B \
+    actor_rollout_ref.model.path=/home/ningmiao/ningyuan/models/DeepSeek-R1-Distill-Qwen-1.5B \
     actor_rollout_ref.model.use_shm=True \
     actor_rollout_ref.actor.optim.lr=1e-6 \
     actor_rollout_ref.model.use_remove_padding=True \
-    actor_rollout_ref.actor.ppo_mini_batch_size=42 \
+    actor_rollout_ref.actor.ppo_mini_batch_size=64 \
     actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=2 \
     actor_rollout_ref.actor.ppo_epochs=4 \
     actor_rollout_ref.actor.clip_ratio=0.2 \
@@ -61,12 +59,12 @@ PYTHONUNBUFFERED=1 python3 -m verl.trainer.main_ppo \
     actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=2 \
     actor_rollout_ref.rollout.tensor_model_parallel_size=1 \
     actor_rollout_ref.rollout.name=vllm \
-    actor_rollout_ref.rollout.gpu_memory_utilization=0.75 \
+    actor_rollout_ref.rollout.gpu_memory_utilization=0.9 \
     actor_rollout_ref.rollout.n=5 \
     actor_rollout_ref.rollout.load_format=safetensors \
     actor_rollout_ref.rollout.layered_summon=True \
     actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=2 \
-    actor_rollout_ref.ref.fsdp_config.param_offload=True \
+    actor_rollout_ref.ref.fsdp_config.param_offload=False \
     algorithm.use_kl_in_reward=False \
     trainer.critic_warmup=0 \
     trainer.val_before_train=False \
