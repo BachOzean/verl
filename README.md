@@ -1,3 +1,60 @@
+## OpenR1-Math-220k filtering with vLLM (8x GPU, 64 samples)
+
+This pipeline runs a model with vLLM over a math dataset, sampling 64 generations per example, then filters out items that are all-correct or all-wrong, leaving a valid training subset. It also writes the all-correct and all-wrong splits.
+
+### Install
+
+```bash
+pip install -r requirements.txt
+```
+
+### Usage
+
+- Infer only:
+
+```bash
+python openr1_math_pipeline.py infer \
+  --dataset <hf_repo_or_jsonl_path> --split train \
+  --model <hf_model_or_local_path> \
+  --num-generations 64 --batch-size 16 \
+  --tp-size 8 --gpu-mem-util 0.90 \
+  --max-new-tokens 512 --temperature 1.0 --top-p 0.95 \
+  --output-dir outputs --overwrite
+```
+
+- Aggregate only:
+
+```bash
+python openr1_math_pipeline.py aggregate \
+  --dataset <same_as_above> --split train \
+  --raw outputs/raw_outputs.jsonl \
+  --eval-mode sympy \
+  --output-dir outputs
+```
+
+- End-to-end (infer + aggregate):
+
+```bash
+python openr1_math_pipeline.py all \
+  --dataset <hf_repo_or_jsonl_path> --split train \
+  --model <hf_model_or_local_path> \
+  --num-generations 64 --batch-size 16 \
+  --tp-size 8 --gpu-mem-util 0.90 \
+  --max-new-tokens 512 --temperature 1.0 --top-p 0.95 \
+  --eval-mode sympy \
+  --output-dir outputs --overwrite
+```
+
+Notes:
+- The loader auto-detects typical field names. If needed, pass `--question-field` and `--answer-field` explicitly.
+- vLLM uses all 8 GPUs via `--tp-size 8` (tensor parallel). Ensure `CUDA_VISIBLE_DEVICES` exposes 8 GPUs.
+- Set `--limit` during smoke tests.
+- The script writes:
+  - `outputs/raw_outputs.jsonl`
+  - `outputs/subset_valid.jsonl`
+  - `outputs/subset_all_correct.jsonl`
+  - `outputs/subset_all_wrong.jsonl`
+
 <div align="center">
  👋 Hi, everyone! 
     verl is a RL training library initiated by <b>ByteDance Seed team</b> and maintained by the verl community.
