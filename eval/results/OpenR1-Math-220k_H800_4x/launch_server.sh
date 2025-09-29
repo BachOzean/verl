@@ -1,0 +1,1 @@
+python -m vllm.entrypoints.openai.api_server --model '/data/home/scyb494/models/DeepSeek-R1-Distill-Qwen-1.5B' --tensor-parallel-size 4 --dtype bfloat16 --max-model-len 8192 --gpu-memory-utilization 0.90 --trust-remote-code --port 8000

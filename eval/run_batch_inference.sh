@@ -19,6 +19,7 @@ DATASET="/data/home/scyb494/.cache/huggingface/hub/datasets--open-r1--OpenR1-Mat
 SPLIT="train"
 OUTPUT_DIR="$HOME/verl/eval/results/OpenR1-Math-220k"
 NUM_SAMPLES=64
+SAMPLES_PER_CALL=8
 BATCH_SIZE=32
 NUM_GPUS=4
 GPU_MEMORY=0.75
@@ -54,6 +55,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --batch_size)
             BATCH_SIZE="$2"
+            shift 2
+            ;;
+        --samples_per_call)
+            SAMPLES_PER_CALL="$2"
             shift 2
             ;;
         --num_gpus)
@@ -113,6 +118,7 @@ echo "  模型: $MODEL"
 echo "  数据集: $DATASET"
 echo "  输出目录: $OUTPUT_DIR"
 echo "  样本数: $NUM_SAMPLES"
+echo "  每次调用采样: $SAMPLES_PER_CALL"
 echo "  批大小: $BATCH_SIZE"
 echo "  GPU数量: $NUM_GPUS"
 echo "  GPU内存利用率: $GPU_MEMORY"
@@ -128,6 +134,7 @@ exec python $SCRIPT_PATH \
     --split "$SPLIT" \
     --output_dir "$OUTPUT_DIR" \
     --num_samples "$NUM_SAMPLES" \
+    --samples_per_call "$SAMPLES_PER_CALL" \
     --batch_size "$BATCH_SIZE" \
     --num_gpus "$NUM_GPUS" \
     --gpu_memory_utilization "$GPU_MEMORY" \

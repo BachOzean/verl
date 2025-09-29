@@ -15,6 +15,8 @@ def parse_args():
     parser.add_argument("--split", type=str, default="default")
     parser.add_argument("--output_dir", type=str, default="/home/ningmiao/ningyuan/verl/eval/results/OpenR1-Math-220k")
     parser.add_argument("--num_samples", type=int, default=64)
+    # 每次 generate 调用要采样的样本数，分轮次累计到 num_samples，降低峰值显存
+    parser.add_argument("--samples_per_call", type=int, default=8)
     parser.add_argument("--batch_size", type=int, default=32)
     parser.add_argument("--num_gpus", type=int, default=8)
     parser.add_argument("--gpu_memory_utilization", type=float, default=0.9)
@@ -86,12 +88,45 @@ def main_worker(rank, world_size, args):
             trust_remote_code=True,
             max_num_seqs=args.max_num_seqs,
         )
-        sampling_params = SamplingParams(
+        # 采样参数（每轮动态设置 n）
+        base_sampling_kwargs = dict(
             temperature=0.6,
             top_p=0.95,
-            n=args.num_samples,
             max_tokens=args.max_tokens,
         )
+
+        def make_sampling_params(n: int) -> SamplingParams:
+            return SamplingParams(n=n, **base_sampling_kwargs)
+
+        def is_oom_error(err: Exception) -> bool:
+            msg = str(err).lower()
+            return ("out of memory" in msg) or ("cuda oom" in msg) or ("c10::error" in msg and "memory" in msg)
+
+        def generate_with_oom_backoff(prompts_list, n_samples):
+            """调用 vLLM 生成，遇到 OOM 时自动退让：先减半 n，再必要时拆分 batch。"""
+            # 先尝试当前 batch 与 n
+            try_n = max(1, int(n_samples))
+            def try_generate(cur_prompts, cur_n):
+                try:
+                    return llm.generate(cur_prompts, make_sampling_params(cur_n))
+                except Exception as e:
+                    if is_oom_error(e):
+                        # 优先降低样本并发数
+                        if cur_n > 1:
+                            reduced_n = max(1, cur_n // 2)
+                            print(f"[Rank {rank}] OOM detected. Reduce n from {cur_n} to {reduced_n} and retry")
+                            return try_generate(cur_prompts, reduced_n)
+                        # 其次拆分 batch
+                        if isinstance(cur_prompts, list) and len(cur_prompts) > 1:
+                            mid = len(cur_prompts) // 2
+                            print(f"[Rank {rank}] OOM persists. Split batch {len(cur_prompts)} -> {mid}+{len(cur_prompts)-mid}")
+                            left_out = try_generate(cur_prompts[:mid], cur_n)
+                            right_out = try_generate(cur_prompts[mid:], cur_n)
+                            return list(left_out) + list(right_out)
+                    # 其他错误或仍失败则抛出
+                    raise
+
+            return try_generate(prompts_list, try_n)
 
         # 流式写出每个 shard 的结果，避免在内存中堆积
         shard_file = os.path.join(args.output_dir, f"shard_{rank}.jsonl")
@@ -151,10 +186,22 @@ def main_worker(rank, world_size, args):
                         raise
 
                 try:
-                    outputs = llm.generate(prompts, sampling_params)
+                    # 累积式生成：多轮调用直到达到 num_samples
+                    target_samples = max(1, int(args.num_samples))
+                    samples_per_call = max(1, int(args.samples_per_call))
+                    remaining = target_samples
+                    aggregated = [[] for _ in range(len(prompts))]
 
-                    for j, out in enumerate(outputs):
-                        generations = [o.text for o in out.outputs]
+                    while remaining > 0:
+                        cur_n = min(samples_per_call, remaining)
+                        outputs = generate_with_oom_backoff(prompts, cur_n)
+                        for j, out in enumerate(outputs):
+                            gens = [o.text for o in out.outputs]
+                            aggregated[j].extend(gens)
+                        remaining -= cur_n
+
+                    for j in range(len(prompts)):
+                        generations = aggregated[j]
                         gt_answer = answers[j]
 
                         # 当无标准答案时，不做正确性判断，标记为 valid
@@ -163,7 +210,7 @@ def main_worker(rank, world_size, args):
                             status = "valid"
                         else:
                             correct_count = sum(is_correct(gen, gt_answer) for gen in generations)
-                            if correct_count == args.num_samples:
+                            if correct_count == target_samples:
                                 status = "all_correct"
                             elif correct_count == 0:
                                 status = "all_wrong"
