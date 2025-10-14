@@ -1,2 +1,4 @@
 *.jsonl
 *.json
+# include /data/home/scyb494/verl/eval/subproblems_openr1_2025-10-14.jsonl.log
+!subproblems_openr1_2025-10-14.jsonl

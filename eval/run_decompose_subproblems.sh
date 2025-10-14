@@ -11,18 +11,18 @@ SILICONFLOW_API_KEY=${SILICONFLOW_API_KEY:-sk-eejcrxhumrpflxyelcwavqyslrezedxxsm
 INPUT_PATH=${INPUT_PATH:-/data/home/scyb494/.cache/huggingface/hub/datasets--open-r1--OpenR1-Math-220k/snapshots/e4e141ec9dea9f8326f4d347be56105859b2bd68/data}
 TARGET_FILE=${TARGET_FILE:-/data/home/scyb494/verl/eval/valid_deduped.jsonl}
 OUTPUT_DIR=${OUTPUT_DIR:-/data/home/scyb494/verl/eval}
-MODEL=${MODEL:-deepseek-ai/DeepSeek-V3.1-Terminus}
+MODEL=${MODEL:-deepseek-ai/DeepSeek-V3.2-Exp}
 MAX_TOKENS=${MAX_TOKENS:-2048}
 TEMPERATURE=${TEMPERATURE:-0.7}
 TOP_P=${TOP_P:-0.9}
 TOP_K=${TOP_K:-20}
-BATCH_SIZE=${BATCH_SIZE:-5}
+BATCH_SIZE=${BATCH_SIZE:-10}
 MAX_RETRIES=${MAX_RETRIES:-3}
-DELAY=${DELAY:-0.6}
+DELAY=${DELAY:-0.1}
 
 mkdir -p "${OUTPUT_DIR}"
 TS=$(date +%F_%H%M%S)
-OUTPUT_FILE="${OUTPUT_DIR}/subproblems_openr1_2025-10-07_183033.jsonl"
+OUTPUT_FILE="${OUTPUT_DIR}/subproblems_openr1_2025-10-14.jsonl"
 
 echo "[INFO] Repo root:        ${REPO_ROOT}"
 echo "[INFO] Input path:       ${INPUT_PATH}"
@@ -47,8 +47,7 @@ python /data/home/scyb494/verl/eval/decompose_subproblems_api.py \
   --top_p "${TOP_P}" \
   --top_k "${TOP_K}" \
   --batch_size "${BATCH_SIZE}" \
-  --max_retries "${MAX_RETRIES}" \
-  --delay "${DELAY}" > "${OUTPUT_FILE}.log" 2>&1
+  --max_retries "${MAX_RETRIES}" > "${OUTPUT_FILE}.log" 2>&1
 
 echo "[INFO] Done. Results saved to: ${OUTPUT_FILE}"
 
