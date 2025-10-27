@@ -13,6 +13,8 @@ from lighteval.tasks.lighteval_task import LightevalTaskConfig
 import numpy as np
 
 
+# import nltk
+# nltk.download("punkt")
 ########################################################
 # prompt_fn
 ########################################################
@@ -84,7 +86,6 @@ math500_task = LightevalTaskConfig(
     prompt_function=math500_prompt_fn,
     hf_repo="HuggingFaceH4/MATH-500",
     hf_subset="default",
-    # trust_dataset=True,
     hf_avail_splits=["test"],
     evaluation_splits=["test"],
     few_shots_split=None,

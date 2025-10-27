@@ -110,7 +110,6 @@ def default_compute_score(
 
     else:
         from . import math_reward
-
         res = math_reward.compute_score(solution_str, ground_truth)
         # raise NotImplementedError(f"Reward function is not implemented for {data_source=}")
 

@@ -3,7 +3,8 @@ export HYDRA_FULL_ERROR=1
 export HF_ENDPOINT="https://hf-mirror.com"
 
 # 批推理启动脚本
-HOME="/data/home/scyb494"
+# HOME="/data/home/scyb494"
+HOME="/home/ningmiao/ningyuan"
 
 SCRIPT_PATH="$HOME/verl/eval/batch_inference.py"
 
@@ -15,17 +16,17 @@ fi
 
 # 默认参数
 MODEL="$HOME/models/DeepSeek-R1-Distill-Qwen-1.5B"
-DATASET="/data/home/scyb494/.cache/huggingface/hub/datasets--open-r1--OpenR1-Math-220k/snapshots/e4e141ec9dea9f8326f4d347be56105859b2bd68/data"
+DATASET="/home/ningmiao/ningyuan/verl/data/OpenR1-Math-220k/data"
 SPLIT="train"
 OUTPUT_DIR="$HOME/verl/eval/results/OpenR1-Math-220k"
-NUM_SAMPLES=64
-SAMPLES_PER_CALL=8
-BATCH_SIZE=32
-NUM_GPUS=4
+NUM_SAMPLES=16
+SAMPLES_PER_CALL=4
+BATCH_SIZE=4
+NUM_GPUS=8
 GPU_MEMORY=0.75
 # 新增：控制长度、精度与并发
-MAX_MODEL_LEN=4096
-MAX_TOKENS=1024
+MAX_MODEL_LEN=8192
+MAX_TOKENS=4096
 DTYPE="bfloat16"   # 可选: auto|bfloat16|float16|float32
 MAX_NUM_SEQS=1
 

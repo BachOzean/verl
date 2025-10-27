@@ -9,6 +9,7 @@
 **/*.whl
 **/playground
 **/wandb
+**/*.parquet
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -126,3 +127,5 @@ log
 outputs
 .history
 *.out
+
+.triton/

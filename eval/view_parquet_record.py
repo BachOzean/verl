@@ -5,6 +5,7 @@
 用法示例：
   python3 view_parquet_record.py /path/to/file.parquet -i 0
   python3 view_parquet_record.py /path/to/file.parquet -i -1 --meta
+  python3 eval/view_parquet_record.py "/home/ningmiao/ningyuan/verl/eval/results/math500/details/_home_ningmiao_ningyuan_verl_checkpoints_grpo_decompostion_1015_02:13_global_step_100_actor_huggingface/2025-10-15T15-27-13.051488/details_custom|math_500|0_2025-10-15T15-27-13.051488.parquet" -i 0
 """
 
 from __future__ import annotations

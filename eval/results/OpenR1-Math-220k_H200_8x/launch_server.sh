@@ -1,0 +1,1 @@
+/opt/anaconda3/envs/xny_verl/bin/python -m vllm.entrypoints.openai.api_server --model '/home/ningmiao/ningyuan/models/DeepSeek-R1-Distill-Qwen-1.5B' --tensor-parallel-size 1 --dtype bfloat16 --max-model-len 8192 --gpu-memory-utilization 0.90 --trust-remote-code --port 8000
